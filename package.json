@@ -11,6 +11,9 @@
   },
   "name": "PruebaTecnicaHolafly",
   "version": "1.0.0",
+  "engines": {
+    "node": "20.2.0"
+  },
   "description": "Prueba Técnica de Holafly",
   "main": "index.js",
   "scripts": {
