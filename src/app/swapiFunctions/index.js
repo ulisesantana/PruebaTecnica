@@ -18,8 +18,10 @@ const genericRequest = async (url, method, body, logging = false) => {
   }
   return data
 }
+const getIdFromUrl = url => url.split('/').filter(Boolean).at(-1)
 
 module.exports = {
   getWeightOnPlanet,
-  genericRequest
+  genericRequest,
+  getIdFromUrl
 }
