@@ -9,6 +9,25 @@ sequelize = new Sequelize('sqlite::memory:', {
   logging: false // console.log
 })
 
+/**
+ * The database object that holds the Sequelize instance, the Sequelize library,
+ * and all model instances.
+ *
+ * @typedef {Object<string, Sequelize | Sequelize.Model | Function<Promise<void>>>} DB
+ * @property {Sequelize} Sequelize - The Sequelize library.
+ * @property {Sequelize} sequelize - The Sequelize instance.
+ * @property {Sequelize.Model} swPeople - The People model
+ * @property {Sequelize.Model} swPlanet - The Planet model
+ * @property {Sequelize.Model} logging - The Logging model
+ * @property {Function<Promise<void>>} initDB - Initializes the database models.
+ * @property {Function<Promise<void>>} populateDB - Populates the database with initial data.
+ * @property {Function<Promise<void>>} watchDB - Logs the current state of database models.
+ * @property {Function<Promise<void>>} deleteDB - Drops all tables from the database.
+ */
+
+/**
+ * @type {DB}
+ */
 const db = {
   Sequelize,
   sequelize
@@ -37,14 +56,12 @@ const initDB = async () => {
 const populateDB = async () => {
   await db.swPlanet.bulkCreate([
     {
-      id: '/planets/1',
       name: 'Tatooine',
       gravity: 1.0
     }
   ])
   await db.swPeople.bulkCreate([
     {
-      id: '/people/1',
       name: 'Luke Skywalker',
       height: 172,
       mass: 77,
