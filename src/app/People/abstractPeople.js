@@ -10,7 +10,7 @@ class AbstractPeople {
    */
   constructor (id, peopleService) {
     if (this.constructor === AbstractPeople) {
-      throw new Error('Abstract clases can\'t be instantiated.')
+      throw new Error('Abstract classes can\'t be instantiated.')
     }
     this.id = id
     this.service = peopleService
