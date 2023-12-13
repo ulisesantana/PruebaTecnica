@@ -36,8 +36,8 @@ describe('Planet service should', () => {
       const planet = await service.getById(id)
 
       assert.deepEqual(planet, { name: raw.name, gravity: 1 })
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 1)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 0)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 0)
     })
 
     it('returning the correct planet for the given id from SWAPI as fallback from database', async () => {
@@ -51,8 +51,8 @@ describe('Planet service should', () => {
       const planet = await service.getById(id)
 
       assert.deepEqual(planet, { name: raw.name, gravity: 1 })
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 1)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 1)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
 
     it('returning null if no planet is found for the given id', async () => {
@@ -64,8 +64,8 @@ describe('Planet service should', () => {
       const planet = await service.getById(id)
 
       assert.equal(planet, null)
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 1)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 1)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
   })
 
@@ -97,8 +97,8 @@ describe('Planet service should', () => {
         rrrcrahoahaoro: 1,
         whrascwo: raw.whrascwo
       })
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 0)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 1)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 0)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
 
     it('returning null if no planet is found for the given id', async () => {
@@ -109,8 +109,8 @@ describe('Planet service should', () => {
       const planet = await service.getById(id, { wookiee: true })
 
       assert.equal(planet, null)
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 0)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 1)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 0)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
   })
 })

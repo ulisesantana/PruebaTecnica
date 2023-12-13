@@ -42,10 +42,10 @@ describe('People service should', () => {
       const person = await service.getById(id)
 
       assert.deepEqual(person, raw)
-      assert.equal(db.swPeople.findByPk.mock.calls.length, 1)
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 0)
-      assert.equal(swapi.getPersonById.mock.calls.length, 0)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 0)
+      assert.equal(db.swPeople.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 0)
+      assert.equal(swapi.getPersonById.mock.callCount(), 0)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 0)
     })
 
     it('returning the correct person for the given id from SWAPI, but fetching planet from database', async () => {
@@ -56,10 +56,10 @@ describe('People service should', () => {
       const person = await service.getById(id)
 
       assert.deepEqual(person, raw)
-      assert.equal(db.swPeople.findByPk.mock.calls.length, 1)
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 1)
-      assert.equal(swapi.getPersonById.mock.calls.length, 1)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 0)
+      assert.equal(db.swPeople.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(swapi.getPersonById.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 0)
     })
 
     it('returning the correct person for the given id from SWAPI and also fetching planet from SWAPI because none of them was on database', async () => {
@@ -71,10 +71,10 @@ describe('People service should', () => {
       const person = await service.getById(id)
 
       assert.deepEqual(person, raw)
-      assert.equal(db.swPeople.findByPk.mock.calls.length, 1)
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 1)
-      assert.equal(swapi.getPersonById.mock.calls.length, 1)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 1)
+      assert.equal(db.swPeople.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(swapi.getPersonById.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
 
     it('returning null if no person is found for the given id', async () => {
@@ -87,10 +87,10 @@ describe('People service should', () => {
       const person = await service.getById(id)
 
       assert.equal(person, null)
-      assert.equal(db.swPeople.findByPk.mock.calls.length, 1)
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 0)
-      assert.equal(swapi.getPersonById.mock.calls.length, 1)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 0)
+      assert.equal(db.swPeople.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 0)
+      assert.equal(swapi.getPersonById.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 0)
     })
 
     it('returning null if a person is found for the given id, but it\'s planet id not', async () => {
@@ -103,10 +103,10 @@ describe('People service should', () => {
       const person = await service.getById(id)
 
       assert.equal(person, null)
-      assert.equal(db.swPeople.findByPk.mock.calls.length, 1)
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 1)
-      assert.equal(swapi.getPersonById.mock.calls.length, 1)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 1)
+      assert.equal(db.swPeople.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(swapi.getPersonById.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
   })
 
@@ -137,10 +137,10 @@ describe('People service should', () => {
       const person = await service.getById(id, { wookiee: true })
 
       assert.deepEqual(person, raw)
-      assert.equal(db.swPeople.findByPk.mock.calls.length, 0)
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 0)
-      assert.equal(swapi.getPersonById.mock.calls.length, 1)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 1)
+      assert.equal(db.swPeople.findByPk.mock.callCount(), 0)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 0)
+      assert.equal(swapi.getPersonById.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
 
     it('returning null if no person is found for the given id', async () => {
@@ -151,10 +151,10 @@ describe('People service should', () => {
       const person = await service.getById(id, { wookiee: true })
 
       assert.equal(person, null)
-      assert.equal(db.swPeople.findByPk.mock.calls.length, 0)
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 0)
-      assert.equal(swapi.getPersonById.mock.calls.length, 1)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 0)
+      assert.equal(db.swPeople.findByPk.mock.callCount(), 0)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 0)
+      assert.equal(swapi.getPersonById.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 0)
     })
 
     it('returning null if a person is found for the given id, but it\'s planet id not', async () => {
@@ -165,10 +165,10 @@ describe('People service should', () => {
       const person = await service.getById(id, { wookiee: true })
 
       assert.equal(person, null)
-      assert.equal(db.swPeople.findByPk.mock.calls.length, 0)
-      assert.equal(db.swPlanet.findByPk.mock.calls.length, 0)
-      assert.equal(swapi.getPersonById.mock.calls.length, 1)
-      assert.equal(swapi.getPlanetById.mock.calls.length, 1)
+      assert.equal(db.swPeople.findByPk.mock.callCount(), 0)
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 0)
+      assert.equal(swapi.getPersonById.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
   })
 })
