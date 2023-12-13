@@ -4,7 +4,7 @@ const {
   mock,
   beforeEach
 } = require('node:test')
-const assert = require('assert')
+const assert = require('node:assert')
 const { PlanetService } = require('../../../src/app/Planet')
 const { tatooine } = require('../../fixtures/planets')
 describe('Planet service should', () => {

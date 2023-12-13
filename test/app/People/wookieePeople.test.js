@@ -4,7 +4,7 @@ const {
   mock,
   beforeEach
 } = require('node:test')
-const assert = require('assert')
+const assert = require('node:assert')
 const { WookieePeople } = require('../../../src/app/People/wookieePeople')
 const { wookieeSkywalker } = require('../../fixtures/people')
 describe('Wookiee People should', () => {

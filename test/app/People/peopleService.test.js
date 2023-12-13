@@ -4,7 +4,7 @@ const {
   mock,
   beforeEach
 } = require('node:test')
-const assert = require('assert')
+const assert = require('node:assert')
 const { PeopleService } = require('../../../src/app/People')
 const {
   lukeSkywalker,

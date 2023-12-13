@@ -4,15 +4,12 @@ const {
   mock,
   beforeEach
 } = require('node:test')
-const assert = require('assert')
-const { Planet } = require('../../../src/app/Planet')
-const { tatooine } = require('../../fixtures/planets')
+const assert = require('node:assert')
 const {
   lukeSkywalker,
   wookieeSkywalker
 } = require('../../fixtures/people')
 const { peopleFactory } = require('../../../src/app/People')
-const { AbstractPeople } = require('../../../src/app/People/abstractPeople')
 const { CommonPeople } = require('../../../src/app/People/commonPeople')
 const { WookieePeople } = require('../../../src/app/People/wookieePeople')
 describe('People factory should', () => {
