@@ -39,7 +39,7 @@ describe('People service should', () => {
       const { id, ...raw } = lukeSkywalker
       const service = new PeopleService(db, swapi)
 
-      const person = await service.getById(lukeSkywalker.id)
+      const person = await service.getById(id)
 
       assert.deepEqual(person, raw)
       assert.equal(db.swPeople.findByPk.mock.calls.length, 1)
