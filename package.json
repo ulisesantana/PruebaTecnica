@@ -21,6 +21,7 @@
     "dev": "nodemon --watch ./src index.js",
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
+    "test": "node --test --experimental-test-coverage test/**/*.test.js"
   },
   "devDependencies": {
     "eslint": "^8.55.0",
