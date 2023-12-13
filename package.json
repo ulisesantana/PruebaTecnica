@@ -18,6 +18,15 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon --watch ./src index.js"
+    "dev": "nodemon --watch ./src index.js",
+    "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
+  },
+  "devDependencies": {
+    "eslint": "^8.55.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-n": "^16.4.0",
+    "eslint-plugin-promise": "^6.1.1"
   }
 }
