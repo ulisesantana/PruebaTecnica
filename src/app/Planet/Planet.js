@@ -1,10 +1,21 @@
 class Planet {
-  constructor (id) {
-    throw new Error('To be implemented')
+  constructor (id, service) {
+    this.id = id
+    this.service = service
+    this.found = null
   }
 
   async init () {
-    throw new Error('To be implemented')
+    const planet = await this.service.getById(this.id)
+    this.found = !!planet
+    if (this.found) {
+      this.setValues(planet)
+    }
+    return this
+  }
+
+  getId () {
+    return this.id
   }
 
   getName () {
@@ -14,4 +25,22 @@ class Planet {
   getGravity () {
     return this.gravity
   }
+
+  isMissing () {
+    return !this.found
+  }
+
+  setValues (planet) {
+    this.name = planet.name
+    this.gravity = planet.gravity
+  }
+
+  toRaw () {
+    return {
+      name: this.getName(),
+      gravity: this.getGravity()
+    }
+  }
 }
+
+module.exports = { Planet }
