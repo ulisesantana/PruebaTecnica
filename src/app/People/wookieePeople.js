@@ -7,10 +7,6 @@ const { AbstractPeople } = require('./abstractPeople')
  * @param {PeopleService} peopleService - The service for managing people.
  */
 class WookieePeople extends AbstractPeople {
-  constructor (id, service) {
-    super(id, service)
-  }
-
   async init () {
     const person = await this.service.getById(this.id, { wookiee: true })
     this.found = !!person

@@ -6,10 +6,6 @@ const { AbstractPeople } = require('./abstractPeople')
  * @param {number} id - The ID of the person.
  * @param {PeopleService} peopleService - The service for managing people.
  */
-class CommonPeople extends AbstractPeople {
-  constructor (id, service) {
-    super(id, service)
-  }
-}
+class CommonPeople extends AbstractPeople {}
 
 module.exports = { CommonPeople }
