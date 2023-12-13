@@ -65,8 +65,9 @@ describe('Common People should', () => {
   })
 
   it('return raw value', async () => {
-    const person = await new CommonPeople(lukeSkywalker.id, service).init()
+    const { id, ...raw } = lukeSkywalker
+    const person = await new CommonPeople(id, service).init()
 
-    assert.deepEqual(person.toRaw(), lukeSkywalker)
+    assert.deepEqual(person.toRaw(), raw)
   })
 })

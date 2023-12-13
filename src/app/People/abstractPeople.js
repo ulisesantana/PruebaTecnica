@@ -74,7 +74,6 @@ class AbstractPeople {
 
   toRaw () {
     return {
-      id: this.getId(),
       name: this.getName(),
       height: this.getHeight(),
       mass: this.getMass(),

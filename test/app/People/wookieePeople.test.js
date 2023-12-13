@@ -40,10 +40,10 @@ describe('Wookiee People should', () => {
   })
 
   it('return raw value', async () => {
+    const { id, ...raw } = wookieeSkywalker
     const person = await new WookieePeople(wookieeSkywalker.id, service).init()
 
     assert.deepEqual(person.toRaw(), {
-      id: wookieeSkywalker.id,
       height: wookieeSkywalker.acwoahrracao,
       homeworld_id: wookieeSkywalker.acooscwoohoorcanwa_ahwa,
       homeworld_name: wookieeSkywalker.acooscwoohoorcanwa_whrascwo,
