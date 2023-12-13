@@ -21,7 +21,7 @@ class AbstractPeople {
     const person = await this.service.getById(this.id)
     this.found = !!person
     if (this.found) {
-      this.#setValues(person)
+      this.setValues(person)
     }
     return this
   }
@@ -61,7 +61,7 @@ class AbstractPeople {
     if (this.getHomeworldName() === planet.getName()) {
       throw new Error('Not allowed to calculate weight on person\'s home planet.')
     }
-    return getWeightOnPlanet(this.getMass(), 1)
+    return getWeightOnPlanet(this.getMass(), planet.getGravity())
   }
 
   /**
@@ -83,7 +83,7 @@ class AbstractPeople {
     }
   }
 
-  #setValues (person) {
+  setValues (person) {
     this.name = person.name
     this.height = person.height
     this.mass = person.mass
