@@ -1,5 +1,3 @@
-const { getIdFromUrl } = require('../swapiFunctions')
-
 class PlanetService {
   /**
    * @constructor
