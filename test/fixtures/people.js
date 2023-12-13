@@ -1,6 +1,6 @@
 module.exports = {
   lukeSkywalker: {
-    id: '/people/1',
+    id: 1,
     name: 'Luke Skywalker',
     height: 172,
     mass: 77,
