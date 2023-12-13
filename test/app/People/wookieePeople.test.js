@@ -6,7 +6,7 @@ const {
 } = require('node:test')
 const assert = require('assert')
 const { WookieePeople } = require('../../../src/app/People/wookieePeople')
-const { wookieeSkywalker } = require('../../fixtures/wookiee.lukeSkywalker')
+const { wookieeSkywalker } = require('../../fixtures/people')
 describe('Wookiee People should', () => {
   let service
 
