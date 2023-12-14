@@ -29,6 +29,8 @@
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-n": "^16.4.0",
     "eslint-plugin-promise": "^6.1.1",
-    "nyc": "^15.1.0"
+    "nock": "^13.4.0",
+    "nyc": "^15.1.0",
+    "supertest": "^6.3.3"
   }
 }
