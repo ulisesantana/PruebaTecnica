@@ -219,4 +219,46 @@ describe('SWAPI endpoints under /hfswapi', () => {
       name: 'Traaoooooahwhwo'
     })
   })
+
+  it('/getWeightOnPlanetRandom return person, planet and weight', async () => {
+    const randomPlanet = { name: 'Mars', gravity: '0.3 standard', url: 'irrelevant/3/' }
+    nock(StarWarsApi.baseUrl)
+      .get(/\/people\/.*/)
+      .reply(200, rawApiPerson)
+    nock(StarWarsApi.baseUrl)
+      .get(/\/planets\/.*/)
+      .reply(200, randomPlanet)
+
+    const response = await request(application)
+      .get('/hfswapi/getWeightOnPlanetRandom')
+      .set('Accept', 'application/json')
+      .set('Content-Type', 'application/json')
+
+    const { body, statusCode } = response
+    assert.equal(statusCode, 200)
+    assert.equal('person' in body, true)
+    assert.equal(body.person.name, rawApiPerson.name)
+    assert.equal('planet' in body, true)
+    assert.equal(body.planet.name, randomPlanet.name)
+    assert.equal('weight' in body, true)
+    assert.equal(body.weight, rawApiPerson.mass * 0.3)
+  })
+
+  it('/getWeightOnPlanetRandom throw error if the planet is the person home planet', async () => {
+    nock(StarWarsApi.baseUrl)
+      .get(/\/people\/.*/)
+      .reply(200, rawApiPerson)
+    nock(StarWarsApi.baseUrl)
+      .get(/\/planets\/.*/)
+      .reply(200, rawApiPlanet)
+
+    const response = await request(application)
+      .get('/hfswapi/getWeightOnPlanetRandom')
+      .set('Accept', 'application/json')
+      .set('Content-Type', 'application/json')
+
+    const { body, statusCode } = response
+    assert.equal(statusCode, 500)
+    assert.deepEqual(body, { status: 500, error: 'Not allowed to calculate weight on person\'s home planet.' })
+  })
 })

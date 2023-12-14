@@ -41,7 +41,7 @@ const applySwapiEndpoints = (server, app) => {
     } catch (error) {
       res.status(500).send({
         status: 500,
-        error: `${error}`
+        error: `${error.message || error}`
       })
     }
   })
@@ -69,16 +69,27 @@ const applySwapiEndpoints = (server, app) => {
         res.send(planet.toRaw())
       }
     } catch (error) {
-      console.error('ERROR', error)
       res.status(500).send({
         status: 500,
-        error: `${error}`
+        error: `${error.message || error}`
       })
     }
   })
 
   server.get('/hfswapi/getWeightOnPlanetRandom', async (req, res) => {
-    res.sendStatus(501)
+    try {
+      const { planet, person, weight } = await app.services.peopleService.getWeightOnPlanetRandom()
+      res.send({
+        person: person.toRaw(),
+        planet: planet.toRaw(),
+        weight
+      })
+    } catch (error) {
+      res.status(500).send({
+        status: 500,
+        error: `${error.message || error}`
+      })
+    }
   })
 
   server.get('/hfswapi/getLogs', async (req, res) => {
