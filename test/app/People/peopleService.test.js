@@ -24,8 +24,14 @@ describe('People service should', () => {
   describe('get people by id', () => {
     beforeEach(() => {
       db = {
-        swPeople: { findByPk: mock.fn(async () => lukeSkywalker) },
-        swPlanet: { findByPk: mock.fn(async () => tatooine) }
+        swPeople: {
+          create: mock.fn(async (item) => item),
+          findByPk: mock.fn(async () => lukeSkywalker)
+        },
+        swPlanet: {
+          create: mock.fn(async (item) => item),
+          findByPk: mock.fn(async () => tatooine)
+        }
       }
       swapi = {
         getPersonById: mock.fn(async () => rawApiPerson),
@@ -34,7 +40,10 @@ describe('People service should', () => {
     })
 
     it('returning the correct person for the given id from database', async () => {
-      const { id, ...raw } = lukeSkywalker
+      const {
+        id,
+        ...raw
+      } = lukeSkywalker
       const service = new PeopleService(db, swapi)
 
       const person = await service.getById(id)
@@ -46,8 +55,30 @@ describe('People service should', () => {
       assert.equal(swapi.getPlanetById.mock.callCount(), 0)
     })
 
+    it('returning the correct person for the given id from SWAPI and saving it to the database', async () => {
+      const {
+        id,
+        ...raw
+      } = lukeSkywalker
+      db.swPeople.findByPk = mock.fn(async () => null)
+      const service = new PeopleService(db, swapi)
+
+      const person = await service.getById(id)
+
+      assert.deepEqual(person, raw)
+      assert.equal(db.swPeople.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPeople.create.mock.callCount(), 1)
+      assert.deepEqual(db.swPeople.create.mock.calls[0].arguments, [{ ...lukeSkywalker, id }])
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(swapi.getPersonById.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 0)
+    })
+
     it('returning the correct person for the given id from SWAPI, but fetching planet from database', async () => {
-      const { id, ...raw } = lukeSkywalker
+      const {
+        id,
+        ...raw
+      } = lukeSkywalker
       db.swPeople.findByPk = mock.fn(async () => null)
       const service = new PeopleService(db, swapi)
 
@@ -56,12 +87,16 @@ describe('People service should', () => {
       assert.deepEqual(person, raw)
       assert.equal(db.swPeople.findByPk.mock.callCount(), 1)
       assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPeople.create.mock.callCount(), 1)
       assert.equal(swapi.getPersonById.mock.callCount(), 1)
       assert.equal(swapi.getPlanetById.mock.callCount(), 0)
     })
 
-    it('returning the correct person for the given id from SWAPI and also fetching planet from SWAPI because none of them was on database', async () => {
-      const { id, ...raw } = lukeSkywalker
+    it('returning the correct person for the given id from SWAPI and also fetching planet from SWAPI because none of them was on database and saving them', async () => {
+      const {
+        id,
+        ...raw
+      } = lukeSkywalker
       db.swPeople.findByPk = mock.fn(async () => null)
       db.swPlanet.findByPk = mock.fn(async () => null)
       const service = new PeopleService(db, swapi)
@@ -71,6 +106,8 @@ describe('People service should', () => {
       assert.deepEqual(person, raw)
       assert.equal(db.swPeople.findByPk.mock.callCount(), 1)
       assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPeople.create.mock.callCount(), 1)
+      assert.equal(db.swPlanet.create.mock.callCount(), 1)
       assert.equal(swapi.getPersonById.mock.callCount(), 1)
       assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
@@ -87,6 +124,7 @@ describe('People service should', () => {
       assert.equal(person, null)
       assert.equal(db.swPeople.findByPk.mock.callCount(), 1)
       assert.equal(db.swPlanet.findByPk.mock.callCount(), 0)
+      assert.equal(db.swPeople.create.mock.callCount(), 0)
       assert.equal(swapi.getPersonById.mock.callCount(), 1)
       assert.equal(swapi.getPlanetById.mock.callCount(), 0)
     })
@@ -103,6 +141,7 @@ describe('People service should', () => {
       assert.equal(person, null)
       assert.equal(db.swPeople.findByPk.mock.callCount(), 1)
       assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPeople.create.mock.callCount(), 0)
       assert.equal(swapi.getPersonById.mock.callCount(), 1)
       assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
@@ -121,13 +160,15 @@ describe('People service should', () => {
     })
 
     it('returning the correct person for the given id fetching all info to SWAPI in wookiee format', async () => {
-      const { id, ...raw } = wookieeSkywalker
+      const {
+        id,
+        ...raw
+      } = wookieeSkywalker
       const service = new PeopleService(db, swapi)
 
       const person = await service.getById(id, { wookiee: true })
 
       assert.deepEqual(person, raw)
-      assert.equal(db.swPeople.findByPk.mock.callCount(), 0)
       assert.equal(db.swPlanet.findByPk.mock.callCount(), 0)
       assert.equal(swapi.getPersonById.mock.callCount(), 1)
       assert.equal(swapi.getPlanetById.mock.callCount(), 1)
@@ -167,12 +208,19 @@ describe('People service should', () => {
     const maxId = 50
 
     it('successfully', async () => {
-      const randomPlanet = { name: 'Mars', gravity: 0.3 }
+      const randomPlanet = {
+        name: 'Mars',
+        gravity: 0.3
+      }
       db.swPeople.findByPk = mock.fn(async () => lukeSkywalker)
       db.swPlanet.findByPk = mock.fn(async () => randomPlanet)
       const service = new PeopleService(db, swapi)
 
-      const { person, planet, weight } = await service.getWeightOnPlanetRandom()
+      const {
+        person,
+        planet,
+        weight
+      } = await service.getWeightOnPlanetRandom()
 
       const [personId] = db.swPeople.findByPk.mock.calls[0].arguments
       assert.equal(personId >= minId, true)

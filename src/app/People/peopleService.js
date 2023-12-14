@@ -20,6 +20,10 @@ class PeopleService {
     this.planetService = new PlanetService(db, swapi)
   }
 
+  create (person) {
+    return this.db.swPeople.create(person)
+  }
+
   /**
    * Retrieves a person by their ID.
    *
@@ -67,15 +71,20 @@ class PeopleService {
     if (!planet) {
       return null
     }
-    return options.wookiee
-      ? this.#mapToWookieePerson(person, planet)
-      : this.#mapToPerson(person, planet)
+    if (options.wookiee) {
+      return this.#mapToWookieePerson(person, planet)
+    }
+    const result = this.#mapToPerson(person, planet)
+    await this.create({ ...result, id })
+    return result
   }
 
   async #getPlanet (id, options) {
     const planet = await this.db.swPlanet.findByPk(id)
     if (!planet) {
-      return this.swapi.getPlanetById(id, options)
+      const result = this.swapi.getPlanetById(id, options)
+      await this.planetService.create({ ...result, id })
+      return result
     }
     return planet
   }
