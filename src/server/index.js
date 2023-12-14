@@ -8,16 +8,17 @@ const createExpressServer = async (app) => {
   applyEndpoints(server, app)
 
   await app.db.initDB()
+  await app.db.populateDB()
 
   server.get('/', async (req, res) => {
     if (process.env.NODE_ENV === 'develop') {
       res.send('Test Enviroment')
     } else {
-		    res.sendStatus(200)
+      res.sendStatus(200)
     }
   })
 
   return server
 }
 
-module.exports = createExpressServer
+module.exports = { createExpressServer }
