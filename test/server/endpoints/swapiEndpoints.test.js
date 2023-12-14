@@ -27,16 +27,15 @@ describe('SWAPI endpoints under /hfswapi', () => {
 
     const { statusCode, body } = response
     assert.equal(statusCode, 200)
-    assert.equal(Array.isArray(body), true)
-    assert.equal(body.length, 1)
-    body.forEach((log) => {
-      assert.equal('id' in log, true)
-      assert.equal('action' in log, true)
-      assert.equal('header' in log, true)
-      assert.equal('ip' in log, true)
-      assert.equal('createdAt' in log, true)
-      assert.equal('updatedAt' in log, true)
-    })
+    assert.equal('data' in body, true)
+    assert.equal('pageCount' in body, true)
+    assert.equal('currentPage' in body, true)
+    assert.equal('pageSize' in body, true)
+    assert.equal(Array.isArray(body.data), true)
+    assert.equal(body.data.length, 1)
+    assert.equal(body.pageCount, 1)
+    assert.equal(body.currentPage, 1)
+    assert.equal(body.pageSize, 10)
   })
 
   it('/getLogs with multiple results', async () => {
@@ -47,16 +46,38 @@ describe('SWAPI endpoints under /hfswapi', () => {
 
     const { statusCode, body } = response
     assert.equal(statusCode, 200)
-    assert.equal(Array.isArray(body), true)
-    assert.equal(body.length, 2)
-    body.forEach((log) => {
-      assert.equal('id' in log, true)
-      assert.equal('action' in log, true)
-      assert.equal('header' in log, true)
-      assert.equal('ip' in log, true)
-      assert.equal('createdAt' in log, true)
-      assert.equal('updatedAt' in log, true)
-    })
+    assert.equal(body.data.length, 2)
+    assert.equal(body.pageCount, 1)
+    assert.equal(body.currentPage, 1)
+    assert.equal(body.pageSize, 10)
+  })
+
+  it('/getLogs with pagination and page size through query params', async () => {
+    const response = await request(application)
+      .get('/hfswapi/getLogs?pageSize=2')
+      .set('Accept', 'application/json')
+      .set('Content-Type', 'application/json')
+
+    const { statusCode, body } = response
+    assert.equal(statusCode, 200)
+    assert.equal(body.data.length, 2)
+    assert.equal(body.pageCount, 2)
+    assert.equal(body.currentPage, 1)
+    assert.equal(body.pageSize, 2)
+  })
+
+  it('/getLogs from a given page through query params', async () => {
+    const response = await request(application)
+      .get('/hfswapi/getLogs?pageSize=2&page=2')
+      .set('Accept', 'application/json')
+      .set('Content-Type', 'application/json')
+
+    const { statusCode, body } = response
+    assert.equal(statusCode, 200)
+    assert.equal(body.data.length, 2)
+    assert.equal(body.pageCount, 2)
+    assert.equal(body.currentPage, 2)
+    assert.equal(body.pageSize, 2)
   })
 
   it('/getPeople/:id from database', async () => {

@@ -11,17 +11,17 @@ class LoggingService {
     return this.db.logging.create(log)
   }
 
-  async getAll (limit = 10, page = 1) {
+  async getAll (size = 10, page = 1) {
     const { count, rows } = await this.db.logging.findAndCountAll({
-      limit,
-      offset: (page - 1) * limit
+      limit: size,
+      offset: (page - 1) * size
     })
 
     return {
       data: rows,
-      pageCount: Math.ceil(count / limit),
+      pageCount: Math.ceil(count / size),
       currentPage: page,
-      pageSize: limit
+      pageSize: size
     }
   }
 }

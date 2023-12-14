@@ -1,10 +1,7 @@
 const { peopleFactory } = require('../../app/People')
 const { planetFactory } = require('../../app/Planet')
 const _isWookieeFormat = (req) => {
-  if (req.query.format && req.query.format === 'wookiee') {
-    return true
-  }
-  return false
+  return req.query.format && req.query.format === 'wookiee'
 }
 const _isValidId = id => /\d/.test(id)
 const _getErrorBody = (status, error) => ({
@@ -23,7 +20,7 @@ const applySwapiEndpoints = (server, app) => {
     res.send(data)
   })
 
-  server.get('/hfswapi/getPeople/:id', async (req, res, next) => {
+  server.get('/hfswapi/getPeople/:id', async (req, res) => {
     const { id } = req.params
     if (!_isValidId(id)) {
       return res.status(400).send(_getIdBadRequestErrorBody(id))
@@ -87,7 +84,11 @@ const applySwapiEndpoints = (server, app) => {
   })
 
   server.get('/hfswapi/getLogs', async (req, res) => {
-    const data = await app.db.logging.findAll()
+    let { pageSize, page } = req.query
+    pageSize = isNaN(pageSize) ? undefined : pageSize
+    page = isNaN(page) ? undefined : page
+
+    const data = await app.services.loggingService.getAll(pageSize, page)
     res.send(data)
   })
 }
