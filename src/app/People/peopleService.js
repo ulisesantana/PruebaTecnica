@@ -106,8 +106,8 @@ class PeopleService {
   #mapToPerson (person, planet) {
     return {
       name: person.name,
-      height: person.height,
-      mass: person.mass,
+      height: Number(person.height),
+      mass: Number(person.mass),
       homeworld_name: planet.name,
       homeworld_id: `/planets/${planet.id || getIdFromUrl(planet.url)}`
     }
@@ -116,8 +116,8 @@ class PeopleService {
   #mapToWookieePerson (person, planet) {
     return {
       whrascwo: person.whrascwo,
-      acwoahrracao: person.acwoahrracao,
-      scracc: person.scracc,
+      acwoahrracao: Number(person.acwoahrracao),
+      scracc: Number(person.scracc),
       acooscwoohoorcanwa_whrascwo: planet.whrascwo,
       acooscwoohoorcanwa_ahwa: `/akanrawhwoaoc/${getIdFromUrl(planet.hurcan)}`
     }
