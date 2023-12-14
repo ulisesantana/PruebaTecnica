@@ -46,7 +46,7 @@ class PlanetService {
   }
 
   #extractGravity (gravityStandard) {
-    return gravityStandard.split(' ')[0]
+    return Number(gravityStandard.split(' ')[0])
   }
 }
 

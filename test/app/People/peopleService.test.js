@@ -11,15 +11,13 @@ const {
   wookieeSkywalker
 } = require('../../fixtures/people')
 const { tatooine } = require('../../fixtures/planets')
+const {
+  rawApiPerson,
+  rawApiPlanet,
+  rawApiWookiePerson,
+  rawApiWookiePlanet
+} = require('../../fixtures/raw')
 describe('People service should', () => {
-  const { name, height, mass } = lukeSkywalker
-  const rawApiPerson = {
-    ...{ name, height, mass },
-    homeworld: 'https://swapi.dev/api/planets/1/'
-  }
-  const rawApiPlanet = {
-    url: rawApiPerson.homeworld, name: tatooine.name
-  }
   let db
   let swapi
 
@@ -111,14 +109,6 @@ describe('People service should', () => {
   })
 
   describe('get people by id with wookiee format', () => {
-    const { whrascwo, acwoahrracao, scracc } = wookieeSkywalker
-    const rawApiWookiePerson = {
-      ...{ whrascwo, acwoahrracao, scracc },
-      acooscwoohoorcanwa: 'acaoaoakc://cohraakah.wawoho/raakah/akanrawhwoaoc/1/'
-    }
-    const rawApiWookiePlanet = {
-      hurcan: rawApiWookiePerson.acooscwoohoorcanwa, whrascwo: 'Traaoooooahwhwo'
-    }
     beforeEach(() => {
       db = {
         swPeople: { findByPk: mock.fn(async () => null) },

@@ -5,9 +5,9 @@ const {
   beforeEach
 } = require('node:test')
 const assert = require('node:assert')
-const { Planet } = require('../../../src/app/Planet')
+const { CommonPlanet } = require('../../../src/app/Planet')
 const { tatooine } = require('../../fixtures/planets')
-describe('Planet should', () => {
+describe('CommonPlanet should', () => {
   let service
 
   beforeEach(() => {
@@ -16,28 +16,28 @@ describe('Planet should', () => {
 
   it('be inited asynchronously', async () => {
     const { id } = tatooine
-    const person = new Planet(id, service)
+    const planet = new CommonPlanet(id, service)
 
-    await person.init()
+    await planet.init()
 
     assert.deepEqual(service.getById.mock.calls[0].arguments, [id])
-    assert.equal(person.getId(), id)
-    assert.equal(person.getName(), tatooine.name)
-    assert.equal(person.getGravity(), tatooine.gravity)
-    assert.equal(person.isMissing(), false)
+    assert.equal(planet.getId(), id)
+    assert.equal(planet.getName(), tatooine.name)
+    assert.equal(planet.getGravity(), tatooine.gravity)
+    assert.equal(planet.isMissing(), false)
   })
 
   it('set as missing if there is no planet for the given id', async () => {
     const service = { getById: mock.fn(() => null) }
-    const person = await new Planet(tatooine.id, service).init()
+    const planet = await new CommonPlanet(tatooine.id, service).init()
 
-    assert.equal(person.isMissing(), true)
+    assert.equal(planet.isMissing(), true)
   })
 
   it('return raw value', async () => {
     const { id, ...raw } = tatooine
-    const person = await new Planet(id, service).init()
+    const planet = await new CommonPlanet(id, service).init()
 
-    assert.deepEqual(person.toRaw(), raw)
+    assert.deepEqual(planet.toRaw(), raw)
   })
 })

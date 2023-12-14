@@ -1,4 +1,8 @@
-class Planet {
+class AbstractPlanet {
+  /**
+   * @param {number} id
+   * @param {PlanetService} service
+   */
   constructor (id, service) {
     this.id = id
     this.service = service
@@ -43,4 +47,4 @@ class Planet {
   }
 }
 
-module.exports = { Planet }
+module.exports = { AbstractPlanet }
