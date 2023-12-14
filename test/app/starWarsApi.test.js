@@ -60,7 +60,7 @@ describe('Star Wars API should', () => {
 
     assert.deepEqual(planet, tatooine)
     assert.equal(request.mock.callCount(), 1)
-    assert.deepEqual(request.mock.calls[0].arguments, [{ url: 'https://swapi.dev/api/planets/42?format=wookiee' }])
+    assert.deepEqual(request.mock.calls[0].arguments, [{ url: 'https://swapi.dev/api/planets/42', query: { format: 'wookiee' } }])
   })
 
   it('fetch people by id with wookiee format', async () => {
@@ -71,6 +71,6 @@ describe('Star Wars API should', () => {
 
     assert.deepEqual(person, lukeSkywalker)
     assert.equal(request.mock.callCount(), 1)
-    assert.deepEqual(request.mock.calls[0].arguments, [{ url: 'https://swapi.dev/api/people/42?format=wookiee' }])
+    assert.deepEqual(request.mock.calls[0].arguments, [{ url: 'https://swapi.dev/api/people/42', query: { format: 'wookiee' } }])
   })
 })
