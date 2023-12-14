@@ -104,6 +104,19 @@ describe('SWAPI endpoints under /hfswapi', () => {
     assert.deepEqual(body, { status: 404, error: `Person with id ${id} not found` })
   })
 
+  it('/getPeople/:id return 400 if id is not numeric', async () => {
+    const id = 'meh'
+
+    const response = await request(application)
+      .get(`/hfswapi/getPeople/${id}`)
+      .set('Accept', 'application/json')
+      .set('Content-Type', 'application/json')
+
+    const { statusCode, body } = response
+    assert.equal(statusCode, 400)
+    assert.deepEqual(body, { status: 400, error: `Id expected to be a number. Received: ${id}` })
+  })
+
   it('/getPeople/:id from SWAPI with wookiee format', async () => {
     nock(StarWarsApi.baseUrl)
       .get('/people/42')
@@ -129,8 +142,6 @@ describe('SWAPI endpoints under /hfswapi', () => {
       name: 'Lhuorwo Sorroohraanorworc'
     })
   })
-
-  // TODO
 
   it('/getPlanet/:id from database', async () => {
     const { id, ...expectedPlanet } = tatooine
@@ -175,6 +186,19 @@ describe('SWAPI endpoints under /hfswapi', () => {
     const { statusCode, body } = response
     assert.equal(statusCode, 404)
     assert.deepEqual(body, { status: 404, error: `Planet with id ${id} not found` })
+  })
+
+  it('/getPlanet/:id return 400 if id is not numeric', async () => {
+    const id = 'meh'
+
+    const response = await request(application)
+      .get(`/hfswapi/getPlanet/${id}`)
+      .set('Accept', 'application/json')
+      .set('Content-Type', 'application/json')
+
+    const { statusCode, body } = response
+    assert.equal(statusCode, 400)
+    assert.deepEqual(body, { status: 400, error: `Id expected to be a number. Received: ${id}` })
   })
 
   it('/getPlanet/:id from SWAPI with wookiee format', async () => {

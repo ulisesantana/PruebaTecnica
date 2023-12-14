@@ -6,6 +6,7 @@ const _isWookieeFormat = (req) => {
   }
   return false
 }
+const _isValidId = id => /\d/.test(id)
 
 const applySwapiEndpoints = (server, app) => {
   server.get('/hfswapi/test', async (req, res) => {
@@ -16,8 +17,14 @@ const applySwapiEndpoints = (server, app) => {
     res.send(data)
   })
 
-  server.get('/hfswapi/getPeople/:id', async (req, res) => {
+  server.get('/hfswapi/getPeople/:id', async (req, res, next) => {
     const { id } = req.params
+    if (!_isValidId(id)) {
+      return res.status(400).send({
+        status: 400,
+        error: `Id expected to be a number. Received: ${id}`
+      })
+    }
     try {
       const person = await peopleFactory({
         id,
@@ -25,17 +32,28 @@ const applySwapiEndpoints = (server, app) => {
         service: app.services.peopleService
       })
       if (person.isMissing()) {
-        res.status(404).send({ status: 404, error: `Person with id ${id} not found` })
-      } else {
-        res.send(person.toRaw())
+        return res.status(404).send({
+          status: 404,
+          error: `Person with id ${id} not found`
+        })
       }
+      return res.send(person.toRaw())
     } catch (error) {
-      res.status(500).send({ status: 500, error: `${error}` })
+      res.status(500).send({
+        status: 500,
+        error: `${error}`
+      })
     }
   })
 
   server.get('/hfswapi/getPlanet/:id', async (req, res) => {
     const { id } = req.params
+    if (!_isValidId(id)) {
+      return res.status(400).send({
+        status: 400,
+        error: `Id expected to be a number. Received: ${id}`
+      })
+    }
     try {
       const planet = await planetFactory({
         id,
@@ -43,13 +61,19 @@ const applySwapiEndpoints = (server, app) => {
         service: app.services.planetService
       })
       if (planet.isMissing()) {
-        res.status(404).send({ status: 404, error: `Planet with id ${id} not found` })
+        res.status(404).send({
+          status: 404,
+          error: `Planet with id ${id} not found`
+        })
       } else {
         res.send(planet.toRaw())
       }
     } catch (error) {
       console.error('ERROR', error)
-      res.status(500).send({ status: 500, error: `${error}` })
+      res.status(500).send({
+        status: 500,
+        error: `${error}`
+      })
     }
   })
 
