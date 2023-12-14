@@ -14,7 +14,10 @@ class LoggingService {
   async getAll (size = 10, page = 1) {
     const { count, rows } = await this.db.logging.findAndCountAll({
       limit: size,
-      offset: (page - 1) * size
+      offset: (page - 1) * size,
+      order: [
+        ['createdAt', 'DESC']
+      ]
     })
 
     return {
