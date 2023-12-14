@@ -101,7 +101,7 @@ describe('SWAPI endpoints under /hfswapi', () => {
 
     const { statusCode, body } = response
     assert.equal(statusCode, 404)
-    assert.deepEqual(body, { status: 404, error: `Person with id ${id} not found` })
+    assert.deepEqual(body, { status: 404, error: `Resource with id ${id} not found` })
   })
 
   it('/getPeople/:id return 400 if id is not numeric', async () => {
@@ -185,7 +185,7 @@ describe('SWAPI endpoints under /hfswapi', () => {
 
     const { statusCode, body } = response
     assert.equal(statusCode, 404)
-    assert.deepEqual(body, { status: 404, error: `Planet with id ${id} not found` })
+    assert.deepEqual(body, { status: 404, error: `Resource with id ${id} not found` })
   })
 
   it('/getPlanet/:id return 400 if id is not numeric', async () => {

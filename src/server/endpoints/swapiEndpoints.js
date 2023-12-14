@@ -7,6 +7,12 @@ const _isWookieeFormat = (req) => {
   return false
 }
 const _isValidId = id => /\d/.test(id)
+const _getErrorBody = (status, error) => ({
+  status,
+  error: `${error.message || error}`
+})
+const _getNotFoundErrorBody = id => _getErrorBody(404, `Resource with id ${id} not found`)
+const _getIdBadRequestErrorBody = id => _getErrorBody(400, `Id expected to be a number. Received: ${id}`)
 
 const applySwapiEndpoints = (server, app) => {
   server.get('/hfswapi/test', async (req, res) => {
@@ -20,10 +26,7 @@ const applySwapiEndpoints = (server, app) => {
   server.get('/hfswapi/getPeople/:id', async (req, res, next) => {
     const { id } = req.params
     if (!_isValidId(id)) {
-      return res.status(400).send({
-        status: 400,
-        error: `Id expected to be a number. Received: ${id}`
-      })
+      return res.status(400).send(_getIdBadRequestErrorBody(id))
     }
     try {
       const person = await peopleFactory({
@@ -32,10 +35,7 @@ const applySwapiEndpoints = (server, app) => {
         service: app.services.peopleService
       })
       if (person.isMissing()) {
-        return res.status(404).send({
-          status: 404,
-          error: `Person with id ${id} not found`
-        })
+        return res.status(404).send(_getNotFoundErrorBody(id))
       }
       return res.send(person.toRaw())
     } catch (error) {
@@ -49,10 +49,7 @@ const applySwapiEndpoints = (server, app) => {
   server.get('/hfswapi/getPlanet/:id', async (req, res) => {
     const { id } = req.params
     if (!_isValidId(id)) {
-      return res.status(400).send({
-        status: 400,
-        error: `Id expected to be a number. Received: ${id}`
-      })
+      return res.status(400).send(_getIdBadRequestErrorBody(id))
     }
     try {
       const planet = await planetFactory({
@@ -61,10 +58,7 @@ const applySwapiEndpoints = (server, app) => {
         service: app.services.planetService
       })
       if (planet.isMissing()) {
-        res.status(404).send({
-          status: 404,
-          error: `Planet with id ${id} not found`
-        })
+        res.status(404).send(_getNotFoundErrorBody(id))
       } else {
         res.send(planet.toRaw())
       }
