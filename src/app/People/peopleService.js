@@ -1,4 +1,9 @@
 const { getIdFromUrl } = require('../swapiFunctions')
+const {
+  PlanetService,
+  CommonPlanet
+} = require('../Planet')
+const { CommonPeople } = require('./commonPeople')
 
 /**
  * @class PeopleService
@@ -12,6 +17,7 @@ class PeopleService {
   constructor (db, swapi) {
     this.db = db
     this.swapi = swapi
+    this.planetService = new PlanetService(db, swapi)
   }
 
   /**
@@ -33,6 +39,22 @@ class PeopleService {
     }
     delete person.id
     return person
+  }
+
+  async getWeightOnPlanetRandom () {
+    const person = new CommonPeople(this.#getRandomId(), this)
+    const planet = new CommonPlanet(this.#getRandomId(), this.planetService)
+
+    await Promise.all([
+      person.init(),
+      planet.init()
+    ])
+
+    return {
+      person,
+      planet,
+      weight: person.getWeightOnPlanet(planet)
+    }
   }
 
   async #getByIdFromApi (id, options) {
@@ -90,6 +112,13 @@ class PeopleService {
       acooscwoohoorcanwa_whrascwo: planet.whrascwo,
       acooscwoohoorcanwa_ahwa: `/akanrawhwoaoc/${getIdFromUrl(planet.hurcan)}`
     }
+  }
+
+  #getRandomId () {
+    const min = 1
+    const max = 50
+    const result = max - Math.floor(Math.random() * 100)
+    return result >= min && result <= max ? result : this.#getRandomId()
   }
 }
 

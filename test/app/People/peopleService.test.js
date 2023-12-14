@@ -161,4 +161,45 @@ describe('People service should', () => {
       assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
   })
+
+  describe('calc weight on random planet', () => {
+    const minId = 1
+    const maxId = 50
+
+    it('successfully', async () => {
+      const randomPlanet = { name: 'Mars', gravity: 0.3 }
+      db.swPeople.findByPk = mock.fn(async () => lukeSkywalker)
+      db.swPlanet.findByPk = mock.fn(async () => randomPlanet)
+      const service = new PeopleService(db, swapi)
+
+      const { person, planet, weight } = await service.getWeightOnPlanetRandom()
+
+      const [personId] = db.swPeople.findByPk.mock.calls[0].arguments
+      assert.equal(personId >= minId, true)
+      assert.equal(personId <= maxId, true)
+      assert.equal(String(personId).split('.').length === 1, true)
+      const [planetId] = db.swPlanet.findByPk.mock.calls[0].arguments
+      assert.equal(planetId >= minId, true)
+      assert.equal(planetId <= maxId, true)
+      assert.equal(String(planetId).split('.').length === 1, true)
+      assert.equal(weight, lukeSkywalker.mass * planet.gravity)
+      assert.equal(person.name, lukeSkywalker.name)
+      assert.equal(person.mass, lukeSkywalker.mass)
+      assert.equal(planet.name, randomPlanet.name)
+      assert.equal(planet.gravity, randomPlanet.gravity)
+    })
+
+    it('throwing an error if the planet is the person home planet', async () => {
+      db.swPeople.findByPk = mock.fn(async () => lukeSkywalker)
+      db.swPlanet.findByPk = mock.fn(async () => tatooine)
+      const service = new PeopleService(db, swapi)
+
+      try {
+        await service.getWeightOnPlanetRandom()
+        throw new Error('should throw an error on service.getWeightOnPlanet')
+      } catch (error) {
+        assert.strictEqual(error.message, 'Not allowed to calculate weight on person\'s home planet.')
+      }
+    })
+  })
 })

@@ -53,7 +53,7 @@ class AbstractPeople {
   /**
    * Calculate the weight of an object on a specific planet.
    *
-   * @param {Planet} planet - The name of the planet.
+   * @param {CommonPlanet} planet - The name of the planet.
    * @return {number} - The weight of the object on the specified planet.
    * @throws {Error} - If the planet is the person's home planet.
    */
