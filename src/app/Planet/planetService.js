@@ -9,6 +9,10 @@ class PlanetService {
     this.swapi = swapi
   }
 
+  create (planet) {
+    return this.db.swPlanet.create(planet)
+  }
+
   async getById (id, options = { wookiee: false }) {
     if (options.wookiee) {
       return this.#getByIdFromApi(id, options)
@@ -26,9 +30,11 @@ class PlanetService {
     if (!planet) {
       return null
     }
-    return options.wookiee
-      ? this.#mapToWookieePlanet(planet)
-      : this.#mapToPlanet(planet)
+    if (options.wookiee) {
+      return this.#mapToWookieePlanet(planet)
+    }
+    await this.create({ ...planet, id })
+    return this.#mapToPlanet(planet)
   }
 
   #mapToPlanet (planet) {

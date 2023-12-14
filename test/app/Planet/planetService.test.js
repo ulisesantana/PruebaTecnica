@@ -19,7 +19,10 @@ describe('Planet service should', () => {
   describe('get planets by id', () => {
     beforeEach(() => {
       db = {
-        swPlanet: { findByPk: mock.fn(async () => tatooine) }
+        swPlanet: {
+          create: mock.fn(async (item) => item),
+          findByPk: mock.fn(async () => tatooine)
+        }
       }
       swapi = {
         getPlanetById: mock.fn(async () => rawApiPlanet)
@@ -37,6 +40,7 @@ describe('Planet service should', () => {
 
       assert.deepEqual(planet, { name: raw.name, gravity: 1 })
       assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPlanet.create.mock.callCount(), 0)
       assert.equal(swapi.getPlanetById.mock.callCount(), 0)
     })
 
@@ -52,6 +56,23 @@ describe('Planet service should', () => {
 
       assert.deepEqual(planet, { name: raw.name, gravity: 1 })
       assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPlanet.create.mock.callCount(), 1)
+      assert.equal(swapi.getPlanetById.mock.callCount(), 1)
+    })
+
+    it('returning the correct planet for the given id from SWAPI as fallback from database and saving it', async () => {
+      const {
+        id,
+        ...raw
+      } = tatooine
+      db.swPlanet.findByPk = mock.fn(async () => null)
+      const service = new PlanetService(db, swapi)
+
+      const planet = await service.getById(id)
+
+      assert.deepEqual(planet, { name: raw.name, gravity: 1 })
+      assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPlanet.create.mock.callCount(), 1)
       assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
 
@@ -65,6 +86,7 @@ describe('Planet service should', () => {
 
       assert.equal(planet, null)
       assert.equal(db.swPlanet.findByPk.mock.callCount(), 1)
+      assert.equal(db.swPlanet.create.mock.callCount(), 0)
       assert.equal(swapi.getPlanetById.mock.callCount(), 1)
     })
   })
