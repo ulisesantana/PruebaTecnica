@@ -1,3 +1,10 @@
+/**
+ * @typedef  {Object} RawPlanetWithId
+ * @property {number} [id] - The planet ID.
+ * @property {string} name - The name of the planet.
+ * @property {number} gravity - The planet gravity standard ratio.
+ */
+
 class PlanetService {
   /**
    * @constructor
@@ -9,10 +16,22 @@ class PlanetService {
     this.swapi = swapi
   }
 
+  /**
+   * Creates a new planet in the database.
+   *
+   * @param {RawPlanetWithId} planet - The planet object to be created.
+   * @return {Promise<RawPlanetWithId>} A promise that resolves to the created planet object.
+   */
   create (planet) {
     return this.db.swPlanet.create(planet)
   }
 
+  /**
+   * Retrieves a planet by its ID.
+   * @param {string} id - The ID of the planet to retrieve.
+   * @param {StarWarsApiOptions} options - Star Wars API options.
+   * @return {Promise<RawPlanet|RawWookieePlanet|null>} - A promise that resolves to the planet object.
+   */
   async getById (id, options = { wookiee: false }) {
     if (options.wookiee) {
       return this.#getByIdFromApi(id, options)
@@ -25,6 +44,14 @@ class PlanetService {
     return planet
   }
 
+  /**
+   * Retrieves a planet from the API by its ID.
+   *
+   * @param {number} id - The ID of the planet.
+   * @param {StarWarsApiOptions} options - Star Wars API options.
+   *
+   * @returns {Promise<RawPlanet|RawWookieePlanet|null>} - A Promise that resolves with the planet object or null if it doesn't exist.
+   */
   async #getByIdFromApi (id, options) {
     const planet = await this.swapi.getPlanetById(id, options)
     if (!planet) {
@@ -37,6 +64,12 @@ class PlanetService {
     return this.#mapToPlanet(planet)
   }
 
+  /**
+   * Maps a planet object to a Planet format.
+   *
+   * @param {RawPlanet} planet - The planet object to map.
+   * @returns {RawPlanet} - The mapped planet object.
+   */
   #mapToPlanet (planet) {
     return {
       name: planet.name,
@@ -44,6 +77,12 @@ class PlanetService {
     }
   }
 
+  /**
+   * Maps the planet object to Wookiee planet.
+   *
+   * @param {RawWookieePlanet} planet - The planet object to be mapped to Wookiee planet.
+   * @return {RawWookieePlanet} - The mapped planet object in Wookiee planet format.
+   */
   #mapToWookieePlanet (planet) {
     return {
       whrascwo: planet.whrascwo,
@@ -51,6 +90,12 @@ class PlanetService {
     }
   }
 
+  /**
+   * Extracts the gravity value from the given gravity standard.
+   *
+   * @param {string} gravityStandard - The gravity standard string (1.0 standard).
+   * @return {number} - The gravity value extracted from the gravity standard.
+   */
   #extractGravity (gravityStandard) {
     return Number(gravityStandard.split(' ')[0])
   }

@@ -1,5 +1,14 @@
 const { getWeightOnPlanet } = require('../swapiFunctions')
 
+/**
+ * @typedef  {Object} RawPeople
+ * @property {string} name - The name of the person.
+ * @property {string} height - The height of the person.
+ * @property {string} mass - The mass of the person.
+ * @property {string} homeworld_name - The name of the homeworld of the person.
+ * @property {string} homeworld_id - The ID of the homeworld of the person.
+ */
+
 class AbstractPeople {
   /**
    * Constructor for the AbstractPeople class.
@@ -17,6 +26,11 @@ class AbstractPeople {
     this.found = null
   }
 
+  /**
+   * Initializes the object and fetches data from the service.
+   *
+   * @returns {Promise<Object>} Resolves with the initialized object.
+   */
   async init () {
     const person = await this.service.getById(this.id)
     this.found = !!person
@@ -26,26 +40,55 @@ class AbstractPeople {
     return this
   }
 
+  /**
+   * Retrieves the ID of the object.
+   *
+   * @return {number} The ID of the object.
+   */
   getId () {
     return this.id
   }
 
+  /**
+   * Retrieves the name of the object.
+   *
+   * @returns {string} The name of the object.
+   */
   getName () {
     return this.name
   }
 
+  /**
+   * Retrieves the mass of an object.
+   *
+   * @return {number} The mass of the object.
+   */
   getMass () {
     return this.mass
   }
 
+  /**
+   * Returns the height of the object.
+   *
+   * @returns {number} The height of the object.
+   */
   getHeight () {
     return this.height
   }
 
+  /**
+   * Returns the name of the homeworld.
+   *
+   * @returns {string} The name of the homeworld.
+   */
   getHomeworldName () {
     return this.homeworldName
   }
 
+  /**
+   * Returns the homeworld id.
+   * @returns {string} The homeworld id.
+   */
   getHomeworldId () {
     return this.homeworldId
   }
@@ -72,6 +115,11 @@ class AbstractPeople {
     return !this.found
   }
 
+  /**
+   * Retrieves the raw data of the object.
+   *
+   * @return {RawPeople} The raw data of the object, including its properties and values.
+   */
   toRaw () {
     return {
       name: this.getName(),
@@ -82,6 +130,11 @@ class AbstractPeople {
     }
   }
 
+  /**
+   * Sets the values of the person object properties.
+   *
+   * @param {RawPeople} person - The person object containing the properties to set.
+   */
   setValues (person) {
     this.name = person.name
     this.height = person.height

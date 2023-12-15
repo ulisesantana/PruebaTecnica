@@ -6,6 +6,19 @@ const {
 const { CommonPeople } = require('./commonPeople')
 
 /**
+ * @typedef  {Object} RawPeoplePlanet
+ * @property {string} id - The id of the planet.
+ * @property {string} name - The name of the planet.
+ * @property {string} url - The planet url
+ */
+
+/**
+ * @typedef  {Object} RawWookieePeoplePlanet
+ * @property {string} whrascwo - The name of the planet.
+ * @property {string} hurcan - The planet url
+ */
+
+/**
  * @class PeopleService
  * */
 class PeopleService {
@@ -34,9 +47,7 @@ class PeopleService {
    * Retrieves a person by their ID.
    *
    * @param {number} id - The ID of the person to retrieve.
-   * @param {object} [options] - Options for getting person.
-   * @param {boolean} [options.wookiee] - Retrieve from API in wookiee format.
-   *
+   * @param {StarWarsApiOptions} [options] - Options for getting person.
    * @return {Promise<object|null>} A Promise that resolves with the specified person object.
    */
   async getById (id, options = { wookiee: false }) {
@@ -51,14 +62,14 @@ class PeopleService {
     return person
   }
 
+  /**
+   * Calculate the weight of a person on a random planet.
+   *
+   * @returns {Promise<{ person: CommonPeople, planet: CommonPlanet, weight: number }>} - A promise that resolves with an object containing the person, planet, and weight.
+   */
   async getWeightOnPlanetRandom () {
-    const person = new CommonPeople(this.#getRandomId(), this)
-    const planet = new CommonPlanet(this.#getRandomId(), this.planetService)
-
-    await Promise.all([
-      person.init(),
-      planet.init()
-    ])
+    const person = await new CommonPeople(this.#getRandomId(), this).init()
+    const planet = await new CommonPlanet(this.#getRandomId(), this.planetService).init()
 
     return {
       person,
@@ -67,6 +78,12 @@ class PeopleService {
     }
   }
 
+  /**
+   * Retrieves a person by their ID from an API.
+   *
+   * @param {number} id - The ID of the person to retrieve.
+   * @return {RawPeople|null} - The person object if found, or null if not found.
+   */
   async #getByIdFromApi (id) {
     const person = await this.swapi.getPersonById(id)
     if (!person) {
@@ -77,11 +94,17 @@ class PeopleService {
     if (!planet) {
       return null
     }
-    const result = this.#mapToPerson(person, planet)
+    const result = this.#mapToPeople(person, planet)
     await this.create({ ...result, id })
     return result
   }
 
+  /**
+   * Retrieves a planet from the database or fetches it from the external SWAPI service.
+   *
+   * @param {number} id - The ID of the planet to retrieve.
+   * @param {StarWarsApiOptions} [options] - The options for the SWAPI service.
+   */
   async #getPlanet (id, options) {
     const planet = await this.db.swPlanet.findByPk(id)
     if (!planet) {
@@ -92,6 +115,11 @@ class PeopleService {
     return planet
   }
 
+  /**
+   * Retrieves a person and their associated planet from an API in Wookiee format based on the provided ID.
+   * @param {number} id - The ID of the person to fetch.
+   * @returns {Promise<RawWookieePeople>} A promise that resolves to the Wookiee person object, or null if person or planet is not found.
+   */
   async #getByIdFromApiInWookieFormat (id) {
     const options = { wookiee: true }
     const person = await this.swapi.getPersonById(id, options)
@@ -103,10 +131,17 @@ class PeopleService {
     if (!planet) {
       return null
     }
-    return this.#mapToWookieePerson(person, planet)
+    return this.#mapToWookieePeople(person, planet)
   }
 
-  #mapToPerson (person, planet) {
+  /**
+   * Maps a person and a planet to a raw people.
+   *
+   * @param {CommonPeople} person - The person object.
+   * @param {RawPeoplePlanet} planet - The planet object.
+   * @returns {RawPeople} - The new object with mapped properties.
+   */
+  #mapToPeople (person, planet) {
     return {
       name: person.name,
       height: Number(person.height),
@@ -116,7 +151,14 @@ class PeopleService {
     }
   }
 
-  #mapToWookieePerson (person, planet) {
+  /**
+   * Maps a person and a planet to a Wookiee person object.
+   *
+   * @param {RawWookieePeople} person - The person object to be mapped.
+   * @param {RawWookieePeoplePlanet} planet - The planet object to be mapped.
+   * @returns {RawWookieePeople} The mapped Wookiee person object.
+   */
+  #mapToWookieePeople (person, planet) {
     return {
       whrascwo: person.whrascwo,
       acwoahrracao: Number(person.acwoahrracao),
@@ -126,6 +168,11 @@ class PeopleService {
     }
   }
 
+  /**
+   * Generates a random ID between 1 and 50 (inclusive).
+   *
+   * @return {number} The randomly generated ID.
+   */
   #getRandomId () {
     const min = 1
     const max = 50

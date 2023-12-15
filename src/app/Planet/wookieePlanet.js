@@ -1,5 +1,11 @@
 const { AbstractPlanet } = require('./abstractPlanet')
 
+/**
+ * @typedef  {Object} RawWookieePlanet
+ * @property {string} whrascwo - The name of the planet.
+ * @property {number} rrrcrahoahaoro - The planet gravity standard ratio.
+ */
+
 class WookieePlanet extends AbstractPlanet {
   async init () {
     const planet = await this.service.getById(this.id, { wookiee: true })

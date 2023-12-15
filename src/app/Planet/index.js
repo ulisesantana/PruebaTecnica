@@ -2,19 +2,15 @@ const { CommonPlanet } = require('./commonPlanet')
 const { PlanetService } = require('./planetService')
 const { WookieePlanet } = require('./wookieePlanet')
 
-const planetFactory = async ({
+const planetFactory = ({
   id,
   lang,
   service
 }) => {
-  let planet = null
   if (lang === 'wookiee') {
-    planet = new WookieePlanet(id, service)
-  } else {
-    planet = new CommonPlanet(id, service)
+    return new WookieePlanet(id, service).init()
   }
-  await planet.init()
-  return planet
+  return new CommonPlanet(id, service).init()
 }
 
 module.exports = { CommonPlanet, planetFactory, WookieePlanet, PlanetService }
