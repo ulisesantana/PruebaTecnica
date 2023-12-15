@@ -1,14 +1,15 @@
 /**
  * @param {LoggingService} loggingService
+ * @param {Console} logger
  */
-const loggingMiddleware = (loggingService) =>
+const loggingMiddleware = (loggingService, logger) =>
   (req, res, next) => {
-    const ip = (req.headers['x-forwarded-for'] || req.connection.remoteAddress || '').split(',')[0].trim()
+    const ip = (req?.headers['x-forwarded-for'] || req?.connection?.remoteAddress || '').split(',')[0].trim()
     const header = JSON.stringify(req.headers)
     const action = req.originalUrl
-    loggingService.create({ ip, header, action })
+    return loggingService.create({ ip, header, action })
       .catch(error => {
-        console.error(`Error logging "${action}": ${error}`)
+        logger.error(`Error logging "${action}": ${error}`)
       })
       .finally(() => { next() })
   }

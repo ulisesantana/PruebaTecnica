@@ -7,8 +7,8 @@ class LoggingService {
     this.db = db
   }
 
-  create (log) {
-    return this.db.logging.create(log)
+  create ({ ip, header, action }) {
+    return this.db.logging.create({ ip, header, action })
   }
 
   async getAll (size = 10, page = 1) {
