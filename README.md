@@ -2,7 +2,20 @@
 
 # Prueba Tecnica Holafly
 
-## Instrucciones
+1. [📄 Instrucciones](#-instrucciones)
+   1. [Notas](#notas)
+1. [📄 Enunciado de la prueba](#-enunciado-de-la-prueba)
+   1. [/hfswapi/getPeople/:id](#hfswapigetpeopleid)
+   1. [/hfswapi/getPlanet/:id](#hfswapigetplanetid)
+   1. [/hfswapi/getWeightOnPlanetRandom](#hfswapigetweightonplanetrandom)
+   1. [/hfswapi/getLogs](#hfswapigetlogs)
+1. [📝 Notas para quien revise](#-notas-para-quien-revise)
+   1. [✨ Funcionalidades extra](#-funcionalidades-extra)
+   1. [✅ Test automatizados](#-test-automatizados)
+   1. [👷‍♂️ Github Actions](#-github-actions)
+   1. [📦 Instalaciones extra](#-instalaciones-extra)
+
+## 📄 Instrucciones
 
 _Todas las instrucciones parten de la premisa de que el aspirante tiene una versión de node.js instalada en su sistema._
 
@@ -24,7 +37,7 @@ _Todas las instrucciones parten de la premisa de que el aspirante tiene una vers
 - El código ya posee las librerias externas necesarias para realizar todas las funciones requeridas. No obstante, si se desea utilizar alguna libreria externa adicional, esta debe poderse instalar a través de `npm` y su inclusión deberá estar justificada en un comentario en el fichero `README.md`.
 
 
-## Enunciado de la Prueba
+## 📄 Enunciado de la Prueba
 El presente código despliega un servidor node.js/express sobre el que se busca implementar los siguientes endpoints:
 
 
@@ -70,8 +83,8 @@ El presente código despliega un servidor node.js/express sobre el que se busca 
 
 Adicionalmente a estos endpoints, se requiere ampliar el paquete `People` con las clases y funciones que sean necesarias para cubrir el caso de que el formato del objeto retornado por la SWAPI sea en idioma Wookiee.
 
-## Notas para quien revise
-### Funcionalidades extra
+## 📝 Notas para quien revise
+### ✨ Funcionalidades extra
 #### 1. Paginación de `/hfswapi/getLogs`
 A registro por llamada a la API hará que la tabla crezca rápidamente. He añadido paginación al endpoint devolviendo los logs más recientes primero para evitar enviar la tabla entera con cada petición. Soy consciente de que esto es un *breaking change* de cara a que alguien o algo usara ese endpoint anteriormente.
 
@@ -81,7 +94,7 @@ Una vez añadida la funcionalidad de *Wookiee format* para **People**, hacerla p
 #### 3. Añadir elemento a la base de datos después del fallback para `/hfswapi/getPeople/:id` y `/hfswapi/getPlanet/:id`
 En caso de que el recurso no esté en base de datos lo pide a **SWAPI** y antes de devolverlo lo guarda en base de datos para tenerlo de cara a la próxima llamada. De esta manera vamos nutriendo nuestra base de datos reduciendo con el tiempo la dependencia a **SWAPI**. Además, acelera el tiempo de respuesta.
 
-### Test automatizados
+### ✅ Test automatizados
 #### Unitarios
 He añadido varias suites de test para comprobar que el proyecto cumple con los requisitos solicitados. Puedes ejecutar los test y ver el informe de cobertura de test con `npm test`.
 
@@ -95,10 +108,10 @@ He añadido un pequeño script que arranca el servidor y hace llamadas HTTP para
 ✅ /hfswapi/getLogs
 ```
 
-### Github Actions
+### 👷‍♂️ Github Actions
 He añadido un workflow de Github Actions para ejecutar los test cada vez que se añade algo a la rama `main`. Ejecuta sólo los test unitarios ya que los test e2e necesitan acceder a SWAPI por HTTP. Además, recolecta la cobertura de los test para subirlos a [codecov.io](https://app.codecov.io/gh/ulisesantana/PruebaTecnica) y poder analizarlo posteriormente.
 
-### Instalaciones extra
+### 📦 Instalaciones extra
 #### Dependencias de desarrollo
 - **eslint**: He decidido instalar eslint con la configuración de [standardJS](https://standardjs.com) para que el código sea homogéneo.
 - **nyc**: Aunque el test runner de Node.js es estable, su informe de cobertura de test es todavía experimental.
