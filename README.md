@@ -99,7 +99,7 @@ En caso de que el recurso no esté en base de datos lo pide a **SWAPI** y antes 
 He añadido varias suites de test para comprobar que el proyecto cumple con los requisitos solicitados. Puedes ejecutar los test y ver el informe de cobertura de test con `npm test`.
 
 #### End to End
-He añadido un pequeño script que arranca el servidor y hace llamadas HTTP para comprobar que las diferentes capas de código se integran correctamente. Para ejecutarlos ejecuta `npm run test:e2e`. Si todo ha salido correctamente deberías ver esto:
+He añadido un pequeño script que arranca el servidor y hace llamadas HTTP para comprobar que las diferentes capas de código se integran correctamente. La idea de este test es tener un pequeño arnés de seguridad que se pueda ejecutar rápidamente en local para estar seguros de que todo funciona como debería. Para ejecutarlos ejecuta `npm run test:e2e`. Si todo ha salido correctamente deberías ver esto:
 ```shell
 ✅ /hfswapi/getPeople/:id from database
 ✅ /hfswapi/getPeople/:id from SWAPI
