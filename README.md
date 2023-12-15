@@ -69,3 +69,38 @@ El presente código despliega un servidor node.js/express sobre el que se busca 
 
 
 Adicionalmente a estos endpoints, se requiere ampliar el paquete `People` con las clases y funciones que sean necesarias para cubrir el caso de que el formato del objeto retornado por la SWAPI sea en idioma Wookiee.
+
+## Notas para quien revise
+### Funcionalidades extra
+#### 1. Paginación de `/hfswapi/getLogs`
+A registro por llamada a la API hará que la tabla crezca rápidamente. He añadido paginación al endpoint devolviendo los logs más recientes primero para evitar enviar la tabla entera con cada petición. Soy consciente de que esto es un *breaking change* de cara a que alguien o algo usara ese endpoint anteriormente.
+
+#### 2. Wookiee format para `/hfswapi/getPlanet/:id`
+Una vez añadida la funcionalidad de *Wookiee format* para **People**, hacerla para **Planet** era bastante fácil y tenía sentido hacerlo para que los endpoints fueran más coherentes.
+
+#### 3. Añadir elemento a la base de datos después del fallback para `/hfswapi/getPeople/:id` y `/hfswapi/getPlanet/:id`
+En caso de que el recurso no esté en base de datos lo pide a **SWAPI** y antes de devolverlo lo guarda en base de datos para tenerlo de cara a la próxima llamada. De esta manera vamos nutriendo nuestra base de datos reduciendo con el tiempo la dependencia a **SWAPI**. Además, acelera el tiempo de respuesta.
+
+### Test automatizados
+#### Unitarios
+He añadido varias suites de test para comprobar que el proyecto cumple con los requisitos solicitados. Puedes ejecutar los test y ver el informe de cobertura de test con `npm test`.
+
+#### End to End
+He añadido un pequeño script que arranca el servidor y hace llamadas HTTP para comprobar que las diferentes capas de código se integran correctamente. Para ejecutarlos ejecuta `npm run test:e2e`. Si todo ha salido correctamente deberías ver esto:
+```shell
+✅ /hfswapi/getPeople/:id from database
+✅ /hfswapi/getPeople/:id from SWAPI
+✅ /hfswapi/getPlanet/:id from database
+✅ /hfswapi/getPlanet/:id from SWAPI
+✅ /hfswapi/getLogs
+```
+
+### Github Actions
+He añadido un workflow de Github Actions para ejecutar los test cada vez que se añade algo a la rama `main`. Ejecuta sólo los test unitarios ya que los test e2e necesitan acceder a SWAPI por HTTP. Además, recolecta la cobertura de los test para subirlos a [codecov.io](https://app.codecov.io/gh/ulisesantana/PruebaTecnica) y poder analizarlo posteriormente.
+
+### Instalaciones extra
+#### Dependencias de desarrollo
+- **eslint**: He decidido instalar eslint con la configuración de [standardJS](https://standardjs.com) para que el código sea homogéneo.
+- **nyc**: Aunque el test runner de Node.js es estable, su informe de cobertura de test es todavía experimental.
+- **nock**: Aunque podría hacer los test tirando directamente contra SWAPI, prefiero mockear esas llamadas HTTP en los test automatizados. Además, me permite mockear casos como llamadas con un id aleatorio.
+- **supertest**: Para poder automatizar los test de la API necesito esta librería.
