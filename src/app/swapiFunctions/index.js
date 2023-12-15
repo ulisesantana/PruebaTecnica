@@ -1,5 +1,12 @@
 const fetch = require('node-fetch')
 
+/**
+ * Calculates the weight on a planet based on the given mass and gravity.
+ *
+ * @param {number} mass - The mass of the object.
+ * @param {number} gravity - The gravity of the planet.
+ * @return {number} - The weight on the planet.
+ */
 const getWeightOnPlanet = (mass, gravity) => {
   return mass * gravity
 }
@@ -32,6 +39,13 @@ const genericRequest = async ({ url, method, body, query, logging } = {
   }
   return data
 }
+
+/**
+ * Retrieves the ID from a given URL.
+ *
+ * @param {string} url - The URL from which to retrieve the ID.
+ * @returns {string} - The ID extracted from the URL.
+ */
 const getIdFromUrl = url => url.split('/').filter(Boolean).at(-1)
 
 module.exports = {
