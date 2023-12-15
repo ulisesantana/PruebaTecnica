@@ -35,7 +35,7 @@ describe('Logging middleware should', () => {
 
     assert.deepEqual(service.create.mock.calls[0].arguments, [{
       ip: '255.255.255.255',
-      header: JSON.stringify(req.headers),
+      header: req.headers,
       action: req.originalUrl
     }])
 
@@ -58,7 +58,7 @@ describe('Logging middleware should', () => {
     assert.equal(next.mock.callCount(), 1)
     assert.deepEqual(service.create.mock.calls[0].arguments, [{
       ip: req.connection.remoteAddress,
-      header: JSON.stringify(req.headers),
+      header: req.headers,
       action: req.originalUrl
     }])
   })

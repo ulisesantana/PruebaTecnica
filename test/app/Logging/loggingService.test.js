@@ -10,7 +10,7 @@ describe('Logging service should', () => {
     const id = Math.floor(Math.random() * 10 ** 16)
     const log = {
       action: 'https://irrelevant.url',
-      header: '{"Content-Type": "application/json"}',
+      header: { 'Content-Type': 'application/json' },
       ip: '255.255.255.255'
     }
     const db = { logging: { create: mock.fn(async log => ({ ...log, id })) } }
@@ -18,9 +18,9 @@ describe('Logging service should', () => {
 
     const createdLog = await service.create(log)
 
-    assert.deepEqual(createdLog, { ...log, id })
+    assert.deepEqual(createdLog, { ...log, id, header: JSON.stringify(log.header) })
     assert.equal(db.logging.create.mock.callCount(), 1)
-    assert.deepEqual(db.logging.create.mock.calls[0].arguments, [log])
+    assert.deepEqual(db.logging.create.mock.calls[0].arguments, [{ ...log, header: JSON.stringify(log.header) }])
   })
 
   it('get all logs paginating them', async () => {

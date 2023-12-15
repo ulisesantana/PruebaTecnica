@@ -4,14 +4,18 @@
  */
 const loggingMiddleware = (loggingService, logger = console) =>
   (req, res, next) => {
-    const ip = (req?.headers['x-forwarded-for'] || req?.connection?.remoteAddress || '').split(',')[0].trim()
-    const header = JSON.stringify(req.headers)
     const action = req.originalUrl
-    return loggingService.create({ ip, header, action })
+    return loggingService.create({
+      ip: (req?.headers['x-forwarded-for'] || req?.connection?.remoteAddress || '').split(',')[0].trim(),
+      header: req.headers,
+      action
+    })
       .catch(error => {
         logger.error(`Error logging "${action}": ${error}`)
       })
-      .finally(() => { next() })
+      .finally(() => {
+        next()
+      })
   }
 
 module.exports = loggingMiddleware

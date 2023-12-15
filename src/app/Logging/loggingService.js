@@ -7,8 +7,17 @@ class LoggingService {
     this.db = db
   }
 
+  /**
+   * Create a logging entry with the given IP, header, and action.
+   *
+   * @param {string} ip - The IP address of the logging entry.
+   * @param {Object} header - The header information of the logging entry.
+   * @param {string} action - The action of the logging entry.
+   *
+   * @return {Promise} - A Promise that resolves with the created logging entry.
+   */
   create ({ ip, header, action }) {
-    return this.db.logging.create({ ip, header, action })
+    return this.db.logging.create({ ip, header: JSON.stringify(header), action })
   }
 
   /**
