@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/ulisesantana/PruebaTecnica/graph/badge.svg?token=C5KVkQmyAF)](https://codecov.io/gh/ulisesantana/PruebaTecnica)
+
 # Prueba Tecnica Holafly
 
 ## Instrucciones
