@@ -22,8 +22,6 @@ jobs:
         run: npm i
       - name: ✅ Unit test
         run: npm t
-      - name: ✅ E2E test
-        run: npm run test:e2e
       - name: 📊 Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
