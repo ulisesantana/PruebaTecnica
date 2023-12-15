@@ -7,14 +7,10 @@ const peopleFactory = async ({
   lang,
   service
 }) => {
-  let people = null
   if (lang === 'wookiee') {
-    people = new WookieePeople(id, service)
-  } else {
-    people = new CommonPeople(id, service)
+    return new WookieePeople(id, service).init()
   }
-  await people.init()
-  return people
+  return new CommonPeople(id, service).init()
 }
 
 module.exports = { peopleFactory, PeopleService }

@@ -88,7 +88,7 @@ const applySwapiEndpoints = (server, app) => {
     pageSize = isNaN(pageSize) ? undefined : pageSize
     page = isNaN(page) ? undefined : page
 
-    const data = await app.services.loggingService.getAll(pageSize, page)
+    const data = await app.services.loggingService.getAll(page, pageSize)
     res.send(data)
   })
 }

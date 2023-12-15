@@ -20,6 +20,12 @@ class PeopleService {
     this.planetService = new PlanetService(db, swapi)
   }
 
+  /**
+   * Creates a new person in the database.
+   *
+   * @param {Object} person - The person object to be created in the database.
+   * @returns {Promise} - A promise that resolves with the new person created in the database.
+   */
   create (person) {
     return this.db.swPeople.create(person)
   }
@@ -28,8 +34,8 @@ class PeopleService {
    * Retrieves a person by their ID.
    *
    * @param {number} id - The ID of the person to retrieve.
-   * @param {object} options - Options for getting person.
-   * @param {boolean} options.wookiee - Retrieve from API in wookiee format.
+   * @param {object} [options] - Options for getting person.
+   * @param {boolean} [options.wookiee] - Retrieve from API in wookiee format.
    *
    * @return {Promise<object|null>} A Promise that resolves with the specified person object.
    */
@@ -39,7 +45,7 @@ class PeopleService {
     }
     const person = await this.db.swPeople.findByPk(id)
     if (!person) {
-      return this.#getByIdFromApi(id, options)
+      return this.#getByIdFromApi(id)
     }
     delete person.id
     return person
@@ -61,18 +67,15 @@ class PeopleService {
     }
   }
 
-  async #getByIdFromApi (id, options) {
-    const person = await this.swapi.getPersonById(id, options)
+  async #getByIdFromApi (id) {
+    const person = await this.swapi.getPersonById(id)
     if (!person) {
       return null
     }
-    const planetId = getIdFromUrl(options.wookiee ? person.acooscwoohoorcanwa : person.homeworld)
-    const planet = await this.#getPlanet(planetId, options)
+    const planetId = getIdFromUrl(person.homeworld)
+    const planet = await this.#getPlanet(planetId)
     if (!planet) {
       return null
-    }
-    if (options.wookiee) {
-      return this.#mapToWookieePerson(person, planet)
     }
     const result = this.#mapToPerson(person, planet)
     await this.create({ ...result, id })

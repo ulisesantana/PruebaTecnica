@@ -9,6 +9,11 @@ class AbstractPlanet {
     this.found = null
   }
 
+  /**
+   * Initializes the object.
+   *
+   * @returns {Promise<Object>} A Promise that resolves to the initialized object.
+   */
   async init () {
     const planet = await this.service.getById(this.id)
     this.found = !!planet
