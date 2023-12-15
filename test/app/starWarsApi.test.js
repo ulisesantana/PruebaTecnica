@@ -31,14 +31,18 @@ describe('Star Wars API should', () => {
   })
 
   it('return null if request a person fails', async () => {
-    const request = mock.fn(async () => { throw new Error('Boom!') })
-    const api = new StarWarsApi(request)
+    const error = new Error('Boom!')
+    const logger = { error: mock.fn() }
+    const request = mock.fn(async () => { throw error })
+    const api = new StarWarsApi(request, logger)
 
     const planet = await api.getPersonById(42)
 
     assert.deepEqual(planet, null)
     assert.equal(request.mock.callCount(), 1)
+    assert.equal(logger.error.mock.callCount(), 1)
     assert.deepEqual(request.mock.calls[0].arguments, [{ url: 'https://swapi.dev/api/people/42' }])
+    assert.deepEqual(logger.error.mock.calls[0].arguments, [error])
   })
 
   it('return null if request a planet fails', async () => {
