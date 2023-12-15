@@ -22,7 +22,7 @@
     "lint": "eslint .",
     "lint:fix": "npm run lint -- --fix",
     "test": "nyc node --test test",
-    "test:e2e": "./test/e2e.js"
+    "test:e2e": "./e2e.test.js"
   },
   "devDependencies": {
     "eslint": "^8.55.0",
